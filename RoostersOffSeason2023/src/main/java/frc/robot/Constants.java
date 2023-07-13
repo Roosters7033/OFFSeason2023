@@ -27,7 +27,12 @@ public final class Constants {
   }
 
   public static class encoderConstantsIds{
-    public static final int leftEncoder =0;
+    public static final int KLeftEncoderChannel1A = 0;
+    public static final int KLeftEncoderChannel1B = 1;
+    public static final int KRightEncoderChannel1A = 2;
+    public static final int KRightEncoderChannel1B = 3;
+
+    public static final double KLeftEncoderTick2Meter= 1.0/ 4096.0* 0.128* Math.PI;
   }
 
 

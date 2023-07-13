@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.encoderConstantsIds;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -36,7 +38,8 @@ public class DriveSubsystem extends SubsystemBase {
   //create differencial drive
   private DifferentialDrive differentialDrive;
 
-  private Encoder leftEncoder = new Encoder(null, null,false, EncodingType.k2X);
+  private Encoder leftEncoder = new Encoder(Constants.encoderConstantsIds.KLeftEncoderChannel1A, Constants.encoderConstantsIds.KLeftEncoderChannel1B,false,EncodingType.k1X);
+  private Encoder rightEncoder = new Encoder(Constants.encoderConstantsIds.KRightEncoderChannel1A, Constants.encoderConstantsIds.KRightEncoderChannel1B);
 
   private PigeonIMU pigeon;
   
@@ -56,9 +59,24 @@ public class DriveSubsystem extends SubsystemBase {
 
   pigeon = new PigeonIMU(leftDriverPrimary);
 
+  rightDriverPrimary.setInverted(true);
+  rightDriverSecondary.setInverted(true);
+  leftDriverPrimary.setInverted(false);
+  leftDriverSecondary.setInverted(false);
+
   
 
   
+  }
+
+  public void resetEncoders(){
+    this.leftEncoder.reset();
+    this.rightEncoder.reset();
+  }
+
+  public double getEncoderMeters(){
+    return(leftEncoder.get() + -rightEncoder.get())/ 2* encoderConstantsIds.KLeftEncoderTick2Meter;
+
   }
 
 
@@ -90,6 +108,9 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Encoder value", getEncoderMeters());
+    SmartDashboard.putNumber("Left encoder", this.leftEncoder.get());
+    SmartDashboard.putNumber("Right encoder", this.rightEncoder.get());
   }
 
   @Override
