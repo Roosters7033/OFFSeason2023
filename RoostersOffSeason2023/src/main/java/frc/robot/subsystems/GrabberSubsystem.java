@@ -4,11 +4,19 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GrabberSubsystem extends SubsystemBase {
   /** Creates a new GrabberSubsystem. */
-  public GrabberSubsystem() {}
+  private Victor GrabberMotor;
+  public GrabberSubsystem() {
+    GrabberMotor = new Victor(1);
+
+  }
+  public void setMotor(double speed) {
+    GrabberMotor.set(speed);
+  }
 
   @Override
   public void periodic() {

@@ -4,41 +4,52 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ElevatorSubsystem;
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
-/** An example command that uses an example subsystem. */
-public class ElevatorJoystickCmd extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsystem elevatorSubsystem;
+public class ArcadeDriveCmd extends CommandBase {
+  /** Creates a new ArcadeDriveCmd. */
 
-  /**
-   * Creates a new ExampleCommand.
- * @param b
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public ElevatorJoystickCmd(ElevatorSubsystem elevatorSubsystem, boolean b) {
-    this.elevatorSubsystem = elevatorSubsystem;
-    
+  private  DriveSubsystem driveSubsystem;
+  private XboxController controller;
+  private double turn;
+  private double foward;
+ 
+
+
+  public ArcadeDriveCmd(DriveSubsystem drive, XboxController joy) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    driveSubsystem = drive;
+    controller = joy;
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.driveSubsystem.resetEncoders();
+    foward = 0;
+    turn = 0;
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setMotor(0.8);
+    turn = controller.getLeftY();
+    foward = controller.getRightX();
+
+
+    driveSubsystem.set(foward, turn);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.setMotor(0);
+    
   }
 
   // Returns true when the command should end.

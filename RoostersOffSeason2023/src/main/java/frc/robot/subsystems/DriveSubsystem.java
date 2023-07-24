@@ -74,12 +74,12 @@ public class DriveSubsystem extends SubsystemBase {
     this.rightEncoder.reset();
   }
 
-  public double getEncoderMeters(){
-    return(leftEncoder.get() + -rightEncoder.get())/ 2* encoderConstantsIds.KLeftEncoderTick2Meter;
+ 
+
+  public void set (Double val1, Double val2){
+    differentialDrive.arcadeDrive(val1* 0.8, val2*(-1)*this.speed);
 
   }
-
-
 
   /**
    * Example command factory method.
@@ -108,7 +108,6 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Encoder value", getEncoderMeters());
     SmartDashboard.putNumber("Left encoder", this.leftEncoder.get());
     SmartDashboard.putNumber("Right encoder", this.rightEncoder.get());
   }
