@@ -4,35 +4,46 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
 
-  private Victor elevatorMotor;
-  private Encoder elevatorEncoder = new Encoder(4, 5);
-  private final double KEncoderTick2Meter = 1.0/ 4096.0 *0.1 * Math.PI;
+  private Victor elevatorMotorPrimary;
+  private Victor elevatorMotorSecondary;
 
-  public double getEncoderMeters(){
-    return elevatorEncoder.get()* KEncoderTick2Meter;
-  }
+  private Encoder elevatorEncoder = new Encoder(Constants.ElevatorIds.elevatorEncoderChannelA,
+      Constants.ElevatorIds.elevatorEncoderChannelB, false, EncodingType.k1X);
 
+
+  //---------------------------------------------------------------------------------------------------
   public ElevatorSubsystem() {
-    elevatorMotor = new Victor(0);
+    elevatorMotorPrimary = new Victor(Constants.ElevatorIds.primaryMotor);
+    elevatorMotorSecondary = new Victor(Constants.ElevatorIds.secondaryMotor);
   }
 
-  public void setMotor(double speed){
-   elevatorMotor.set(speed);
+  public int getEncoder() {
+    return elevatorEncoder.get();
+  }
+
+  public void set(double speed) {
+    elevatorMotorPrimary.set(speed);
+    elevatorMotorSecondary.set(speed);
+  }
+
+  public void stop(){
+    elevatorMotorPrimary.stopMotor();
+    elevatorMotorSecondary.stopMotor();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator encoder value", getEncoderMeters()); 
+    SmartDashboard.putNumber("Elevator encoder value", getEncoder());
   }
 }

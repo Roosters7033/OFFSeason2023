@@ -4,16 +4,13 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class ArcadeDriveCmd extends CommandBase {
-  /** Creates a new ArcadeDriveCmd. */
 
-  private  DriveSubsystem driveSubsystem;
+  private DriveSubsystem driveSubsystem;
   private XboxController controller;
   private double turn;
   private double foward;
@@ -31,9 +28,6 @@ public class ArcadeDriveCmd extends CommandBase {
   @Override
   public void initialize() {
     this.driveSubsystem.resetEncoders();
-    foward = 0;
-    turn = 0;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +36,9 @@ public class ArcadeDriveCmd extends CommandBase {
     turn = controller.getLeftY();
     foward = controller.getRightX();
 
-
+    if(Math.abs(foward) < 0.3 && Math.abs(turn) < 0.3){
+      driveSubsystem.stop();
+    }
     driveSubsystem.set(foward, turn);
   }
 

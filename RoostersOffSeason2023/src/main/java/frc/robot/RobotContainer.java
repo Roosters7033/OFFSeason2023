@@ -4,62 +4,72 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDriveCmd;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ElevatorJoystickCmd;
+import frc.robot.commands.ExtenderTestCmd;
+import frc.robot.commands.IntakeCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.ExtenderSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  private final GrabberSubsystem  grabberSubsystem = new GrabberSubsystem();
-
-  
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ExtenderSubsystem extenderSubsystem = new ExtenderSubsystem();
 
   private XboxController pilotoJoy = new XboxController(0);
-  private XboxController copilotoJoy= new XboxController(1);
+  private XboxController copilotoJoy = new XboxController(1);
 
-  private Trigger subirElevador = new JoystickButton(copilotoJoy,XboxController.Button.kLeftBumper.value);
+  private Trigger subirElevador = new JoystickButton(copilotoJoy, XboxController.Button.kLeftBumper.value);
   private Trigger descerElevador = new JoystickButton(copilotoJoy, XboxController.Button.kRightBumper.value);
 
-  
+  private Trigger coletor = new JoystickButton(copilotoJoy, XboxController.Button.kA.value);
+  private Trigger lancador = new JoystickButton(copilotoJoy, XboxController.Button.kB.value);
 
-  private int teste  =  copilotoJoy.getPOV();
+  private Trigger testeExtenderOpen = new JoystickButton(copilotoJoy, XboxController.Button.kX.value);
+  private Trigger testeExtenderClose = new JoystickButton(copilotoJoy, XboxController.Button.kY.value);
 
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    defaultCommands();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+    subirElevador.whileTrue(new ElevatorJoystickCmd(elevatorSubsystem, 0.8));
+    descerElevador.whileTrue(new ElevatorJoystickCmd(elevatorSubsystem, -0.8));
+
+    lancador.whileTrue(new IntakeCmd(intakeSubsystem, 0.8));
+    coletor.whileTrue(new IntakeCmd(intakeSubsystem, -0.8));
+
+    testeExtenderOpen.whileTrue(new ExtenderTestCmd(extenderSubsystem, 0.8));
+    testeExtenderClose.whileTrue(new ExtenderTestCmd(extenderSubsystem, -0.8));
+
   }
-  private void defaultCommands(){
+
+  private void defaultCommands() {
     driveSubsystem.setDefaultCommand(new ArcadeDriveCmd(driveSubsystem, pilotoJoy));
   }
 
@@ -71,6 +81,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return null;
     // An example command will be run in autonomous
-    
+
   }
 }
