@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -15,10 +14,10 @@ import frc.robot.Constants;
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
 
-  // Colocando topo de velocidade
-  public double speed = 1.0;
+  // Speed modification for adjusting the motor force
+  public double speedMod = 1.0;
 
-  // Creat DriveTrains groups
+  // Creat motors
   private WPI_TalonSRX leftDriverPrimary;
   private WPI_VictorSPX leftDriverSecondary;
   private WPI_TalonSRX rightDriverPrimary;
@@ -36,8 +35,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   private Encoder rightEncoder = new Encoder(Constants.encoderConstantsIds.KRightEncoderChannel1A,
       Constants.encoderConstantsIds.KRightEncoderChannel1B,false, EncodingType.k1X);
-      
-  private PigeonIMU pigeon;
 
   //---------------------------------------------------------------------------------------------------
   public DriveSubsystem() {
@@ -52,8 +49,6 @@ public class DriveSubsystem extends SubsystemBase {
     rightDriveGroup = new MotorControllerGroup(rightDriverPrimary, rightDriverSecondary);
 
     differentialDrive = new DifferentialDrive(leftDriveGroup, rightDriveGroup);
-
-    pigeon = new PigeonIMU(leftDriverPrimary);
 
     rightDriverPrimary.setInverted(true);
     rightDriverSecondary.setInverted(true);
@@ -70,17 +65,13 @@ public class DriveSubsystem extends SubsystemBase {
     return this.rightEncoder.get();  
   }
 
-  public double getPigeon(){
-    return this.pigeon.getPitch();
-  }
-
   public void resetEncoders() {
     this.leftEncoder.reset();
     this.rightEncoder.reset();
   }
 
   public void set(Double val1, Double val2) {
-    differentialDrive.arcadeDrive(val1 * 0.8, val2 * (-1) * this.speed);
+    differentialDrive.arcadeDrive(val1 * 0.8, val2 * (-1) * this.speedMod);
   }
 
   public void stop(){

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,8 +15,8 @@ public class ExtenderSubsystem extends SubsystemBase {
 
   private Victor extenderMotor;
 
-  private DigitalInput first_switch = new DigitalInput(Constants.ExtenderIds.first_switch);
-  private DigitalInput second_switch = new DigitalInput(Constants.ExtenderIds.second_switch);
+  private DigitalInput rabo_switch = new DigitalInput(Constants.ExtenderIds.rabo_switch);
+  private DigitalInput ponta_switch = new DigitalInput(Constants.ExtenderIds.ponta_switch);
 
 
   //---------------------------------------------------------------------------------------------------
@@ -31,16 +32,17 @@ public class ExtenderSubsystem extends SubsystemBase {
     extenderMotor.stopMotor();
   }
 
-  public boolean getFirstSwitch(){
-    return this.first_switch.get();
+  public boolean getRaboSwitch(){
+    return this.rabo_switch.get();
   }
 
-  public boolean getSecondSwitch(){
-    return this.second_switch.get();
+  public boolean getPontaSwitch(){
+    return this.ponta_switch.get();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Extender First Switch:", getRaboSwitch());
+    SmartDashboard.putBoolean("Extender Second Switch:", getPontaSwitch());
   }
 }

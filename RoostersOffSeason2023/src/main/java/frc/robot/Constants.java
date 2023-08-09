@@ -29,8 +29,6 @@ public final class Constants {
   public static class ElevatorIds{
     public static final int primaryMotor = 0;
     public static final int secondaryMotor = 1;
-    public static final int elevatorEncoderChannelA = 6;
-    public static final int elevatorEncoderChannelB = 7;
   }
 
   public static class IntakeIds{
@@ -40,8 +38,8 @@ public final class Constants {
 
   public static class ExtenderIds{
     public static final int extenderMotor =3;
-    public static final int first_switch = 4;
-    public static final int second_switch = 5;
+    public static final int rabo_switch = 4;
+    public static final int ponta_switch = 5;
   }
 
   public static class encoderConstantsIds{

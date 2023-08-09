@@ -7,13 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ExtenderSubsystem;
 
-public class ExtenderTestCmd extends CommandBase {
+public class ExtenderCmd extends CommandBase {
 
   private ExtenderSubsystem extenderSubsystem;
   private double speed;
 
   /** Creates a new ExtensorTestCmd. */
-  public ExtenderTestCmd(ExtenderSubsystem extenderSubsystem, double speed) {
+  public ExtenderCmd(ExtenderSubsystem extenderSubsystem, double speed) {
 
     this.extenderSubsystem = extenderSubsystem;
     this.speed = speed;
@@ -35,6 +35,10 @@ public class ExtenderTestCmd extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    if(this.speed > 0.0){
+      return this.extenderSubsystem.getPontaSwitch();
+    }else{
+      return this.extenderSubsystem.getRaboSwitch();
+    }
   }
 }

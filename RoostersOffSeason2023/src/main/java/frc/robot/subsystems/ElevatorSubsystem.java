@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,19 +15,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   private Victor elevatorMotorPrimary;
   private Victor elevatorMotorSecondary;
 
-  private Encoder elevatorEncoder = new Encoder(Constants.ElevatorIds.elevatorEncoderChannelA,
-      Constants.ElevatorIds.elevatorEncoderChannelB, false, EncodingType.k1X);
-
-
   //---------------------------------------------------------------------------------------------------
   public ElevatorSubsystem() {
     elevatorMotorPrimary = new Victor(Constants.ElevatorIds.primaryMotor);
     elevatorMotorSecondary = new Victor(Constants.ElevatorIds.secondaryMotor);
   }
 
-  public int getEncoder() {
-    return elevatorEncoder.get();
-  }
 
   public void set(double speed) {
     elevatorMotorPrimary.set(speed);
@@ -44,6 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator encoder value", getEncoder());
+    SmartDashboard.putNumber("Elevator primary value", elevatorMotorPrimary.get());
+    SmartDashboard.putNumber("Elevator secondary value", elevatorMotorSecondary.get());
   }
 }

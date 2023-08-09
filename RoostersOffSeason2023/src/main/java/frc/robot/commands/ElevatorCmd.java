@@ -1,22 +1,29 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ElevatorJoystickCmd extends CommandBase {
+public class ElevatorCmd extends CommandBase {
   private final ElevatorSubsystem elevatorSubsystem;
 
   private double speed;
+  private double time;
+  private Timer _timer;
  
-  public ElevatorJoystickCmd(ElevatorSubsystem elevatorSubsystem, double speed) {
+  public ElevatorCmd(ElevatorSubsystem elevatorSubsystem, double speed, double time) {
     this.elevatorSubsystem = elevatorSubsystem;
     this.speed = speed;
+    this.time = time;
+    this._timer =  new Timer();
     
     addRequirements(elevatorSubsystem);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this._timer.start();
+  }
 
   @Override
   public void execute() {
@@ -30,6 +37,6 @@ public class ElevatorJoystickCmd extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return this._timer.get() >= this.time;
   }
 }
